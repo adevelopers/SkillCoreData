@@ -17,9 +17,7 @@ class AgregateExampleVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        insertDemoData()
-        loadDemoData()
-        
+        find()
         
     }
 
@@ -57,64 +55,84 @@ class AgregateExampleVC: UIViewController {
     }
     
     
-    func saveDemoData(){
-  //      let person = Person.findOrCreate(with: "Alex", context: container.viewContext)
-        
-    //    try! container.viewContext.save()
+    func addDemoData(){
+
+        for _ in 1...100 {
+            self.personAdd()
+        }
     }
     
     
     
     func loadDemoData(){
-        
-        print(Person.entityName)
 
-       // guard let personEntity = NSEntityDescription.entity(forEntityName: Person.entityName, in: getContext()) else { return }
         let persons = Person.fetch(in: getContext())
-        
-        //let persons = Person.fetch(in: persistentContainer.viewContext)
+    
         for person in persons {
-            if let name = person.name {
-                print(name)
+
+            if let name = person.name{
+                print("name: \(name) visits: \(person.visitCount)")
             }
         }
-        //let request = Person.fetchRequest<Person>()
-        
-        // request.fetchBatchSize = 20
-        
         
     }
     
-    func getRandomCount() -> Int64 {
+    func find(){
+       // let predicate = NSPredicate(format: "visitCount > 500")
+        let predicate = NSPredicate(format: "visitCount == max(visitCount)")
         
+        let request = NSFetchRequest<Person>()
+        request.entity = Person.entity()
+        request.predicate = predicate
+        
+        let persons = try! getContext().fetch(request)
+        
+        print("count: \(persons.count)")
+        
+        for person in persons {
+            
+            if let name = person.name{
+                print("name: \(name) visits: \(person.visitCount)")
+            }
+        }
+
+        
+    }
+    
+    
+    func getRandomCount() -> Int64 {
         return Int64(arc4random_uniform(998) + 1)
     }
     
-    
     func getFakeName() -> String {
-        let faker = Faker(locale: "ru-Ru")
-        
- 
+        let faker = Faker(locale: "ru")
         return faker.name.name()
     }
     
-    func insertDemoData(){
-
-        print("insert demo data")
-        print(Person.entityName)
+    func personAdd(){
     
         guard let person = NSEntityDescription.insertNewObject(forEntityName: Person.entityName, into: getContext()) as? Person else {
             fatalError("Wrong Object Type")
         }
         
         person.name = getFakeName()
-        person.id = -1
+        person.id = -1 // for sync with remote server
         person.date = Date() as NSDate
         person.visitCount = getRandomCount()
-        
         try! persistentContainer.viewContext.save()
     }
-    
 
+    func personDeleteAll(){
+        for person in Person.fetch(in: getContext()) {
+            getContext().delete(person)
+        }
+        try! getContext().save()
+    }
+    
+    func personDelete(){
+        
+    }
+    
+    
 }
 
