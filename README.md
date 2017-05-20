@@ -1,0 +1,2 @@
+# SkillCoreData
+Core Data Agregate
