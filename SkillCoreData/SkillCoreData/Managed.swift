@@ -39,7 +39,7 @@ extension Managed where Self: NSManagedObject {
     }
     
     static func getEntityName() -> String {
-        return String(describing: Mirror(reflecting: self)).components(separatedBy: ".").first!
+        return String(describing: Mirror(reflecting: self).subjectType).components(separatedBy: ".").first!
     }
     
     
