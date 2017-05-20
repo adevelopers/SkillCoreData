@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import Fakery
 
 class AgregateExampleVC: UIViewController {
 
@@ -16,11 +17,8 @@ class AgregateExampleVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-     //  insertDemoData()
-       loadDemoData()
-        
-
-        
+        insertDemoData()
+        loadDemoData()
         
         
     }
@@ -93,20 +91,24 @@ class AgregateExampleVC: UIViewController {
     }
     
     
-    func insertDemoData(){
+    func getFakeName() -> String {
+        let faker = Faker(locale: "ru-Ru")
         
+ 
+        return faker.name.name()
+    }
+    
+    func insertDemoData(){
+
         print("insert demo data")
         print(Person.entityName)
-        
-        
-        
-        
+    
         guard let person = NSEntityDescription.insertNewObject(forEntityName: Person.entityName, into: getContext()) as? Person else {
             fatalError("Wrong Object Type")
         }
         
-        person.name = "Mark"
-        person.id = 2
+        person.name = getFakeName()
+        person.id = -1
         person.date = Date() as NSDate
         person.visitCount = getRandomCount()
         
