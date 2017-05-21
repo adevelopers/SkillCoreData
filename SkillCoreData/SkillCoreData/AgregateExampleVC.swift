@@ -11,83 +11,78 @@ import CoreData
 import Fakery
 
 class AgregateExampleVC: UIViewController {
-
-    var container: NSPersistentContainer = (UIApplication.shared.delegate as! AppDelegate).persistentContainer as NSPersistentContainer
+    
+    //MARK: CoreData Properties
+    lazy var context: NSManagedObjectContext = {
+       return CoreDataManager.shared.context
+    }()
+    
+    lazy var db: CoreDataManager = {
+        return CoreDataManager.shared
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        find()
-        
-    }
-
-    lazy var persistentContainer: NSPersistentContainer = {
         /*
-         The persistent container for the application. This implementation
-         creates and returns a container, having loaded the store for the
-         application to it. This property is optional since there are legitimate
-         error conditions that could cause the creation of the store to fail.
+        db.update(id: 31337){ person in
+            person.name = "Худяков Кирилл"
+            person.visitCount = 3
+            return person
+        }
          */
-        let container = NSPersistentContainer(name: "SkillCoreData")
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                
-                /*
-                 Typical reasons for an error here include:
-                 * The parent directory does not exist, cannot be created, or disallows writing.
-                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                 * The device is out of space.
-                 * The store could not be migrated to the current model version.
-                 Check the error message to determine what the actual problem was.
-                 */
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
-        return container
-    }()
-    
-    
-    
-    func getContext() -> NSManagedObjectContext {
-        return persistentContainer.viewContext
+        
+        let person = db.getBy(id: 31337)
+        print("name: \(person.name!) visits: \(person.visitCount)")
     }
-    
-    
-    func addDemoData(){
 
+    
+    //MARK: demo methods
+    func addDemoData(){
         for _ in 1...100 {
             self.personAdd()
         }
     }
     
-    
-    
+    func personAdd(){
+        db.add { person in
+            person.name = getFakeName()
+            person.id = -1 // for sync with remote server
+            person.date = Date() as NSDate
+            person.visitCount = getRandomCount()
+            
+            return person
+        }
+    }
+
     func loadDemoData(){
-
-        let persons = Person.fetch(in: getContext())
-    
-        for person in persons {
-
-            if let name = person.name{
-                print("name: \(name) visits: \(person.visitCount)")
+       
+        db.getData { persons in
+            print("fetching data")
+            for person in persons {
+                
+                if let name = person.name{
+                    print("name: \(name) visits: \(person.visitCount)")
+                }
             }
+            
         }
         
     }
     
+    //TODO: fix this
     func find(){
-       // let predicate = NSPredicate(format: "visitCount > 500")
-        let predicate = NSPredicate(format: "visitCount == max(visitCount)")
-        
+        // let predicate = NSPredicate(format: "visitCount > 500")
+        // let predicate = NSPredicate(format: "visitCount == max(visitCount)")
+        let predicate = NSPredicate(format: "visitCount == average(visitCount)")
         let request = NSFetchRequest<Person>()
         request.entity = Person.entity()
         request.predicate = predicate
         
-        let persons = try! getContext().fetch(request)
+        let persons = try! context.fetch(request)
         
         print("count: \(persons.count)")
+        print(persons)
         
         for person in persons {
             
@@ -96,10 +91,33 @@ class AgregateExampleVC: UIViewController {
             }
         }
 
+    }
+    
+    //TODO: fix average
+    func calcAvg(){
+        let request = NSFetchRequest<Person>()
+         request.entity = Person.entity()
+        request.resultType = .managedObjectResultType
         
+        let salaryExp = NSExpressionDescription()
+        salaryExp.expressionResultType = .integer64AttributeType
+        
+        let kp = #keyPath(Person.visitCount)
+        print(kp)
+        
+        salaryExp.expression = NSExpression(forFunction: "average:", arguments: [NSExpression(forKeyPath: #keyPath(Person.visitCount))])
+        salaryExp.name = "avgVisits"
+        request.propertiesToGroupBy = nil
+        request.propertiesToFetch = [salaryExp]
+        
+        
+        let result = try! CoreDataManager.shared.context.fetch(request)
+        
+        print(result)
     }
     
     
+    //MARK: help function
     func getRandomCount() -> Int64 {
         return Int64(arc4random_uniform(998) + 1)
     }
@@ -108,30 +126,8 @@ class AgregateExampleVC: UIViewController {
         let faker = Faker(locale: "ru")
         return faker.name.name()
     }
-    
-    func personAdd(){
-    
-        guard let person = NSEntityDescription.insertNewObject(forEntityName: Person.entityName, into: getContext()) as? Person else {
-            fatalError("Wrong Object Type")
-        }
-        
-        person.name = getFakeName()
-        person.id = -1 // for sync with remote server
-        person.date = Date() as NSDate
-        person.visitCount = getRandomCount()
-        try! persistentContainer.viewContext.save()
-    }
 
-    func personDeleteAll(){
-        for person in Person.fetch(in: getContext()) {
-            getContext().delete(person)
-        }
-        try! getContext().save()
-    }
-    
-    func personDelete(){
-        
-    }
+
     
     
 }
