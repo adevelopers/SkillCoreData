@@ -24,18 +24,30 @@ class AgregateExampleVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        /*
-        db.update(id: 31337){ person in
-            person.name = "Худяков Кирилл"
-            person.visitCount = 3
-            return person
-        }
-         */
+        let personId:Int64 = 31337
         
-        let person = db.getBy(id: 31337)
-        print("name: \(person.name!) visits: \(person.visitCount)")
+        if (db.getBy(id: personId) != nil){
+            db.update(id: personId){ person in
+                person.name = "Худяков Кирилл"
+                person.visitCount = 3
+                return person
+            }
+        }
+        else {
+            print("Нет такой записи, добавляем")
+            db.add { person in
+                person.name = getFakeName()
+                person.id = 31337
+                person.date = Date() as NSDate
+                person.visitCount = getRandomCount()
+                return person
+            }
+        }
+        
+        if let person = db.getBy(id: personId) {
+            print("name: \(person.name!) visits: \(person.visitCount)")
+        }
     }
-
     
     //MARK: demo methods
     func addDemoData(){
