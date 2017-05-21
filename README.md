@@ -6,7 +6,7 @@ let personId:Int64 = 31337
         
         if (db.getBy(id: personId) != nil){
             db.update(id: personId){ person in
-                person.name = "Худяков Кирилл"
+                person.name = "Kirill aka Adeveloper"
                 person.visitCount = 3
                 return person
             }
