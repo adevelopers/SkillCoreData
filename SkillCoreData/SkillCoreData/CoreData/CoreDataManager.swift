@@ -59,7 +59,7 @@ extension CoreDataManager {
         return persons as! Model
     }
     
-    func getBy(id: Int64 ) -> Model {
+    func getBy(id: Int64 ) -> Model? {
 
         let predicate = NSPredicate(format: "%K == %d",  #keyPath(Person.id), id)
         let request = NSFetchRequest<Model>()
@@ -67,34 +67,23 @@ extension CoreDataManager {
         request.predicate = predicate
         request.fetchLimit = 1
         let items = try! context.fetch(request)
-        return items.first!
+        
+        return items.first
     }
     
     func deleteBy(id: Int64) {
-        let item = self.getBy(id: id)
-        context.delete(item)
+        if let item = self.getBy(id: id) {
+            context.delete(item)
+        }
     }
     
     func update(id: Int64, getValuesForUpdate: (_  model: Model) -> Model ){
-        let item = getBy(id: id)
-        _ = getValuesForUpdate(item)
-        try! context.save()
+        if let item = getBy(id: id) {
+            _ = getValuesForUpdate(item)
+            try! context.save()
+        }
+       
     }
     
 }
 
-/*
-
-class CoreDataManager: CoreDataModel {
-
-
-
-       
-
-
-
-
-    
-
-}
-*/
