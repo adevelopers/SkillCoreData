@@ -11,7 +11,7 @@ import CoreData
 
 class Person: NSManagedObject {
 
- //   static var entityName: String = "Person"
+    static var entityName: String = "Person"
     
     class func findOrCreate(with name:String,context: NSManagedObjectContext) -> Person{
         let entity = NSEntityDescription.insertNewObject(forEntityName: entityName, into: context) as! Person
@@ -29,15 +29,9 @@ extension Person: Managed {
 */
  
 
-extension Person: Managed {
-    
-}
+extension Person: Managed {}
 
-extension Person {
-    
 
-    
-}
 
 
 

@@ -16,13 +16,11 @@ protocol Managed: class, NSFetchRequestResult {
 
 
 extension Managed {
-    
     static var sortedFetchRequest: NSFetchRequest<Self> {
         let request = NSFetchRequest<Self>(entityName: entityName)
         request.sortDescriptors = defaultSortDescriptors
         return request
     }
-    
     static var defaultSortDescriptors: [NSSortDescriptor] { return [] }
 }
 

@@ -21,6 +21,7 @@ protocol CoreDataModel: CoreDataAnyModel {
 }
 
 
+
 class CoreDataManager {
     static var shared: CoreDataManager {
         return CoreDataManager()

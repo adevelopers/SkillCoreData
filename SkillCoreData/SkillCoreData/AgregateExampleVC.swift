@@ -10,6 +10,41 @@ import UIKit
 import CoreData
 import Fakery
 
+
+/*
+ 
+ let personId:Int64 = 31337
+ 
+ if (db.getBy(id: personId) != nil){
+ db.update(id: personId){ person in
+ person.name = "Худяков Кирилл"
+ person.visitCount = 3
+ return person
+ }
+ }
+ else {
+ print("Нет такой записи, добавляем")
+ db.add { person in
+ person.name = getFakeName()
+ person.id = 31337
+ person.date = Date() as NSDate
+ person.visitCount = getRandomCount()
+ return person
+ }
+ }
+ 
+ if let person = db.getBy(id: personId) {
+ print("name: \(person.name!) visits: \(person.visitCount)")
+ }
+ */
+
+extension UIApplication {
+    func incrementBadge(){
+        self.applicationIconBadgeNumber += 1
+        print("Badge number: \(applicationIconBadgeNumber)")
+    }
+}
+
 class AgregateExampleVC: UIViewController {
     
     //MARK: CoreData Properties
@@ -23,31 +58,78 @@ class AgregateExampleVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        UIApplication.shared.incrementBadge()
+        
+        printEvents()
+        
+    }
+    
+    //MARK: Print methods
+    func printMembers(){
+        let memberModel = MemberModel()
+        memberModel.getData{ items in
+            for item in items {
+                print(item)
+            }
+        }
 
-        let personId:Int64 = 31337
+    }
+    func printEvents(){
         
-        if (db.getBy(id: personId) != nil){
-            db.update(id: personId){ person in
-                person.name = "Худяков Кирилл"
-                person.visitCount = 3
-                return person
+        let eventsTable = EventModel()
+        eventsTable.getData{ events in
+            for item in events {
+                print("Event: \(item.theme!)")
             }
-        }
-        else {
-            print("Нет такой записи, добавляем")
-            db.add { person in
-                person.name = getFakeName()
-                person.id = 31337
-                person.date = Date() as NSDate
-                person.visitCount = getRandomCount()
-                return person
-            }
-        }
-        
-        if let person = db.getBy(id: personId) {
-            print("name: \(person.name!) visits: \(person.visitCount)")
         }
     }
+    func printPersons(){
+        let personModel = PersonModel()
+        personModel.getData{ items in
+            for item in items {
+                print("Name: \(String(describing: item.name))")
+            }
+        }
+    }
+    
+    
+    //MARK: Add methods
+    func addDemoEvents(){
+        addEvent(name: "Встреча в Avito в среду")
+        addEvent(name: "Встреча в StarBucks по субботам")
+    }
+    
+    
+    func addMemeber(name: String, email: String){
+        let memberModel = MemberModel()
+        memberModel.add{ member in
+            member.name = name
+            member.email = email
+            return member
+        }
+    }
+    
+    func addPerson(name: String){
+        let personModel = PersonModel()
+        personModel.add{ person in
+            person.name = name
+            return person
+        }
+    }
+    
+    func addEvent(name: String){
+        let eventModel = EventModel()
+        eventModel.add{ event in
+            event.theme = name
+            event.isOpen = true
+            let formatter = DateFormatter()
+            formatter.dateFormat = "dd.mm.YYYY"
+            event.dateStart = formatter.date(from: "11.07.2017")! as NSDate
+            return event
+        }
+        
+    }
+    
     
     //MARK: demo methods
     func addDemoData(){
@@ -68,7 +150,6 @@ class AgregateExampleVC: UIViewController {
     }
 
     func loadDemoData(){
-       
         db.getData { persons in
             print("fetching data")
             for person in persons {
@@ -79,7 +160,6 @@ class AgregateExampleVC: UIViewController {
             }
             
         }
-        
     }
     
     //TODO: fix this
@@ -102,7 +182,6 @@ class AgregateExampleVC: UIViewController {
                 print("name: \(name) visits: \(person.visitCount)")
             }
         }
-
     }
     
     //TODO: fix average

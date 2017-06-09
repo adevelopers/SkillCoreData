@@ -17,6 +17,10 @@
 		710DB67E1ED0485100A89F50 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710DB67D1ED0485100A89F50 /* Person.swift */; };
 		710DB6811ED077AF00A89F50 /* Context.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710DB6801ED077AF00A89F50 /* Context.swift */; };
 		710DB6841ED083F300A89F50 /* Managed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710DB6831ED083F300A89F50 /* Managed.swift */; };
+		710DB6901ED1B94F00A89F50 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710DB68F1ED1B94F00A89F50 /* CoreDataManager.swift */; };
+		7188FCE61EEA12D800EDEDA3 /* MemberModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7188FCE51EEA12D800EDEDA3 /* MemberModel.swift */; };
+		7188FCE91EEA19DB00EDEDA3 /* Member.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7188FCE81EEA19DB00EDEDA3 /* Member.swift */; };
+		7188FCEB1EEA1AD100EDEDA3 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7188FCEA1EEA1AD100EDEDA3 /* Event.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +36,10 @@
 		710DB67D1ED0485100A89F50 /* Person.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		710DB6801ED077AF00A89F50 /* Context.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Context.swift; path = CoreData/Context.swift; sourceTree = "<group>"; };
 		710DB6831ED083F300A89F50 /* Managed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Managed.swift; sourceTree = "<group>"; };
+		710DB68F1ED1B94F00A89F50 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataManager.swift; path = CoreData/CoreDataManager.swift; sourceTree = "<group>"; };
+		7188FCE51EEA12D800EDEDA3 /* MemberModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MemberModel.swift; path = CoreData/Models/MemberModel.swift; sourceTree = "<group>"; };
+		7188FCE81EEA19DB00EDEDA3 /* Member.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Member.swift; path = Models/Member.swift; sourceTree = "<group>"; };
+		7188FCEA1EEA1AD100EDEDA3 /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Event.swift; path = Models/Event.swift; sourceTree = "<group>"; };
 		B9419F880BE9FC28F2521723 /* Pods_SkillCoreData.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SkillCoreData.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E90B2D2039962C82102380EE /* Pods-SkillCoreData.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SkillCoreData.release.xcconfig"; path = "Pods/Target Support Files/Pods-SkillCoreData/Pods-SkillCoreData.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -95,7 +103,9 @@
 			children = (
 				710DB6821ED083CD00A89F50 /* Protocols */,
 				710DB67F1ED0754800A89F50 /* Extensions */,
-				710DB67D1ED0485100A89F50 /* Person.swift */,
+				7188FCE71EEA19AB00EDEDA3 /* Models */,
+				710DB68F1ED1B94F00A89F50 /* CoreDataManager.swift */,
+				7188FCE51EEA12D800EDEDA3 /* MemberModel.swift */,
 			);
 			name = CoreData;
 			sourceTree = "<group>";
@@ -114,6 +124,16 @@
 				710DB6831ED083F300A89F50 /* Managed.swift */,
 			);
 			name = Protocols;
+			sourceTree = "<group>";
+		};
+		7188FCE71EEA19AB00EDEDA3 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				710DB67D1ED0485100A89F50 /* Person.swift */,
+				7188FCE81EEA19DB00EDEDA3 /* Member.swift */,
+				7188FCEA1EEA1AD100EDEDA3 /* Event.swift */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 		B55C2B5E2829525B9892D9AE /* Frameworks */ = {
@@ -252,7 +272,11 @@
 				710DB6841ED083F300A89F50 /* Managed.swift in Sources */,
 				710DB6681ED03F1100A89F50 /* AppDelegate.swift in Sources */,
 				710DB67E1ED0485100A89F50 /* Person.swift in Sources */,
+				7188FCEB1EEA1AD100EDEDA3 /* Event.swift in Sources */,
+				7188FCE91EEA19DB00EDEDA3 /* Member.swift in Sources */,
 				710DB6811ED077AF00A89F50 /* Context.swift in Sources */,
+				7188FCE61EEA12D800EDEDA3 /* MemberModel.swift in Sources */,
+				710DB6901ED1B94F00A89F50 /* CoreDataManager.swift in Sources */,
 				710DB6701ED03F1100A89F50 /* SkillCoreData.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -421,6 +445,7 @@
 				710DB67B1ED03F1100A89F50 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
